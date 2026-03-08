@@ -1,0 +1,142 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700;800&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
+
+    html {
+        font-size: 16px;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        text-rendering: optimizeLegibility;
+    }
+
+    body {
+        background-color: #000000;
+        color: #cccccc;
+        font-family: 'Inter', system-ui, sans-serif;
+        min-height: 100vh;
+        line-height: 1.6;
+    }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar {
+        width: 6px;
+        height: 6px;
+    }
+
+    ::-webkit-scrollbar-track {
+        background: #0a0a0a;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background: #333;
+        border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+        background: #555;
+    }
+
+    ::selection {
+        background-color: rgba(229, 77, 46, 0.3);
+        color: #fff;
+    }
+
+    *:focus-visible {
+        outline: 2px solid #E54D2E;
+        outline-offset: 2px;
+        border-radius: 4px;
+    }
+}
+
+@layer components {
+
+    /* Glass card */
+    .glass-card {
+        @apply bg-surface-card border border-border rounded-2xl;
+    }
+
+    /* Input */
+    .input-dark {
+        @apply w-full bg-surface border border-border-light rounded-xl px-4 py-2.5 text-text-heading text-sm placeholder:text-text-dim focus:outline-none focus:ring-2 focus:ring-accent/40 focus:border-accent transition-all duration-200;
+    }
+
+    /* Buttons */
+    .btn-primary {
+        @apply bg-accent hover:bg-accent-hover text-white font-semibold px-5 py-2.5 rounded-xl transition-all duration-200 hover:shadow-glow-sm active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed;
+    }
+
+    .btn-secondary {
+        @apply bg-surface-card hover:bg-surface-elevated text-text-body border border-border-light font-medium px-5 py-2.5 rounded-xl transition-all duration-200 active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed;
+    }
+
+    .btn-ghost {
+        @apply text-text-muted hover:text-text-heading hover:bg-surface-card px-4 py-2 rounded-xl transition-all duration-200 font-medium;
+    }
+
+    .btn-outline {
+        @apply border border-border-light text-text-body hover:border-accent hover:text-accent px-5 py-2.5 rounded-xl transition-all duration-200 font-medium;
+    }
+
+    /* Status badges */
+    .status-applied {
+        @apply bg-blue-500/15 text-blue-400 border border-blue-500/25 px-2.5 py-0.5 rounded-full text-xs font-semibold;
+    }
+
+    .status-shortlisted {
+        @apply bg-purple-500/15 text-purple-400 border border-purple-500/25 px-2.5 py-0.5 rounded-full text-xs font-semibold;
+    }
+
+    .status-interview {
+        @apply bg-orange-500/15 text-orange-400 border border-orange-500/25 px-2.5 py-0.5 rounded-full text-xs font-semibold;
+    }
+
+    .status-selected {
+        @apply bg-green-500/15 text-green-400 border border-green-500/25 px-2.5 py-0.5 rounded-full text-xs font-semibold;
+    }
+
+    .status-rejected {
+        @apply bg-red-500/15 text-red-400 border border-red-500/25 px-2.5 py-0.5 rounded-full text-xs font-semibold;
+    }
+
+    /* Nav link */
+    .nav-link {
+        @apply flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 text-text-muted hover:bg-surface-card hover:text-text-heading;
+    }
+
+    .nav-link-active {
+        @apply flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 bg-accent/10 text-accent border border-accent/20;
+    }
+
+    /* Table */
+    .table-dark th {
+        @apply text-left text-xs font-semibold text-text-muted uppercase tracking-wider py-3 px-4 border-b border-border;
+    }
+
+    .table-dark td {
+        @apply py-3 px-4 border-b border-border/50 text-sm text-text-body;
+    }
+
+    .table-dark tr:hover td {
+        @apply bg-surface-card/50;
+    }
+}
+
+@layer utilities {
+    .no-scrollbar::-webkit-scrollbar {
+        display: none;
+    }
+
+    .no-scrollbar {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+    }
+}
