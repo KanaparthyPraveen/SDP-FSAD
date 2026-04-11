@@ -1,76 +1,61 @@
-# College Placement Management System
+# PlaceIQ – College Placement Management System (Frontend)
 
-## Table of Contents
-- [Introduction](#introduction)
-- [Features](#features)
-- [Tech Stack](#tech-stack)
-- [Project Structure](#project-structure)
-- [User Roles](#user-roles)
-- [Installation](#installation)
+PlaceIQ is a modern web application designed to streamline the placement process in educational institutions. It provides a seamless interface for students to discover opportunities and for administrators to manage the placement lifecycle.
 
-## Introduction
-The **College Placement Management System** is a web application designed to streamline the placement process in educational institutions. This system provides distinct roles for students, TPO (Training and Placement Officer) admin, management admin, and super admin, ensuring a smooth and efficient workflow.
+## 🔗 Repository Links
+- **Frontend Repo**: [SDP-FSAD](https://github.com/KanaparthyPraveen/SDP-FSAD) (You are here)
+- **Backend Repo**: [SDP-FSAD-BACKEND](https://github.com/KanaparthyPraveen/SDP-FSAD-BACKEND)
 
-## Features
-- **Student Portal**: Students can view available job opportunities, apply for placements, and track their application status.
-- **TPO Admin Portal**: TPO admins can manage job postings, schedule interviews, and track student progress.
-- **Management Admin Portal**: Management can oversee the entire placement process, view reports, and analyze data.
-- **Super Admin Portal**: The super admin can manage system settings, user accounts, and oversee the management of TPO and management users.
-
-## Tech Stack
-- **Frontend**: Vite + React.js, Tailwind CSS
-- **Backend**: Node.js, Express.js
-- **Database**: MongoDB
-- **Authentication**: JSON Web Tokens (JWT)
+## 🚀 Tech Stack
+- **Framework**: Vite + React.js
 - **Styling**: Tailwind CSS
+- **State Management**: React Context / Hooks
+- **Icons**: Lucide React
+- **Build Tool**: Vite
+- **API Communication**: Axios (to Spring Boot Backend)
 
-## Project Structure
+## 🛠️ Key Features
+- **Student Dashboard**: View job postings, apply for placements, and track status.
+- **Admin Dashboard**: Manage companies, student applications, and placement statistics.
+- **Real-time Notifications**: Toast notifications for user actions.
+- **Profile Management**: Professional student profiles with CGPA and skill tracking.
+- **Responsive Design**: Fully responsive UI for mobile and desktop.
+
+## 📂 Project Structure
 ```plaintext
-   ├── public
-   ├── src
-   |   ├── api
-   |   ├── assets
-   │   ├── components
-   |   |   ├──LandingPages
-   |   |   └──students
-   │   ├── config
-   │   ├── context
-   │   ├── hooks
-   │   ├── pages
-   │   ├── styles
-   │   ├── utility
-   │   ├── App.jsx
-   │   └── main.jsx
-   ├── .gitignore
-   ├── .eslint.config.js
-   ├── index.html
-   ├── package-lock.json
-   ├── package.json
-   ├── postcss.config.js
-   ├── tailwind.config.js
-   └── vite.config.js
+src/
+├── api/            # API service calls
+├── components/     # Reusable UI components
+├── context/        # Global state (Auth, UI)
+├── hooks/          # Custom react hooks
+├── pages/          # Full page components (Admin, Student, Auth)
+├── styles/         # Global styles
+└── utility/        # Helper functions
 ```
 
-## User Roles
-- **Students**: Can view and apply for job opportunities, update profiles, and track their application status.
-- **TPO Admin**: Manages job postings, student applications, and interviews.
-- **Management Admin**: Oversees the placement process, views reports, and analyzes placement data.
-- **Super Admin**: Manages the overall system, creates new admin users (TPO and Management), and manages system-level settings.
+## ⚙️ Getting Started
 
-## Installation
-1. Clone the project
+### Prerequisites
+- Node.js (v18 or higher)
+- npm or yarn
+
+### Installation
+1. Clone the repository:
    ```bash
-  
-   ``` 
-2. Go to the project directory
-   ```bash
-   cd my-project
+   git clone https://github.com/KanaparthyPraveen/SDP-FSAD.git
    ```
-3. Install the necessary packages:
+2. Navigate to the project directory:
+   ```bash
+   cd SDP-FSAD
+   ```
+3. Install dependencies:
    ```bash
    npm install
    ```
-4. Start the frontend development server:
+4. Start the development server:
    ```bash
    npm run dev
    ```
+
+## 🌐 Backend Setup
+This frontend requires the PlaceIQ Backend to be running. Follow the instructions in the [Backend Repository](https://github.com/KanaparthyPraveen/SDP-FSAD-BACKEND).
