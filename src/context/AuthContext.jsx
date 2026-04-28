@@ -8,19 +8,20 @@ export function AuthProvider({ children }) {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
+        // Restore session from cached user in sessionStorage
         const current = getCurrentUser();
         setUser(current);
         setLoading(false);
     }, []);
 
-    const login = (email, password) => {
-        const result = authLogin(email, password);
+    const login = async (email, password) => {
+        const result = await authLogin(email, password);
         if (result.success) setUser(result.user);
         return result;
     };
 
-    const register = (data) => {
-        const result = authRegister(data);
+    const register = async (data) => {
+        const result = await authRegister(data);
         if (result.success) setUser(result.user);
         return result;
     };
@@ -30,9 +31,9 @@ export function AuthProvider({ children }) {
         setUser(null);
     };
 
-    const updateProfile = (data) => {
+    const updateProfile = async (data) => {
         if (!user) return { success: false, error: 'Not authenticated' };
-        const result = authUpdateProfile(user.id, data);
+        const result = await authUpdateProfile(user.id, data);
         if (result.success) setUser(result.user);
         return result;
     };

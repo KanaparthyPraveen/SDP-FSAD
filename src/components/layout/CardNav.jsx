@@ -40,8 +40,9 @@ export default function CardNav() {
             bgColor: '#0D0716',
             textColor: '#fff',
             links: [
-                { label: 'Dashboard', path: '/student/dashboard' },
+                { label: 'View Profile', path: '/student/profile' },
                 { label: 'Companies', path: '/student/companies' },
+                { label: 'AI Analytics', path: '/student/ai-analytics' },
             ],
         },
         {
@@ -50,7 +51,6 @@ export default function CardNav() {
             textColor: '#fff',
             links: [
                 { label: 'Applications', path: '/student/applications' },
-                { label: 'Profile', path: '/student/profile' },
             ],
         },
         {
@@ -69,7 +69,7 @@ export default function CardNav() {
             bgColor: '#0D0716',
             textColor: '#fff',
             links: [
-                { label: 'Dashboard', path: '/admin/dashboard' },
+                { label: 'System Overview', path: '/admin/dashboard' },
             ],
         },
         {
@@ -126,8 +126,8 @@ export default function CardNav() {
         gsap.set(navEl, { height: 60, overflow: 'hidden' });
         gsap.set(cardsRef.current, { y: 50, opacity: 0 });
         const tl = gsap.timeline({ paused: true });
-        tl.to(navEl, { height: calculateHeight, duration: 0.4, ease: 'power3.out' });
-        tl.to(cardsRef.current, { y: 0, opacity: 1, duration: 0.4, ease: 'power3.out', stagger: 0.08 }, '-=0.1');
+        tl.to(navEl, { height: calculateHeight, duration: 0.15, ease: 'power3.out' });
+        tl.to(cardsRef.current, { y: 0, opacity: 1, duration: 0.15, ease: 'power3.out', stagger: 0.04 }, '-=0.05');
         return tl;
     };
 
@@ -211,7 +211,7 @@ export default function CardNav() {
                                 </div>
                             )}
                             <button type="button" className="card-nav-cta-button" onClick={() => handleNav(user?.role === 'admin' ? '/admin/dashboard' : '/student/dashboard')}>
-                                Dashboard
+                                {user?.role === 'admin' ? 'Admin Dashboard' : 'Student Dashboard'}
                             </button>
                         </div>
                     </div>

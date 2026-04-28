@@ -1,19 +1,28 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
-import { getCompanies } from '../../data/companies';
+import { apiGetCompanies } from '../../services/api';
 import { Search, Command, ArrowRight, Building2, LayoutDashboard, FileText, User, Settings, LogOut } from 'lucide-react';
 
 export default function CommandPalette() {
     const [open, setOpen] = useState(false);
     const [query, setQuery] = useState('');
     const [activeIndex, setActiveIndex] = useState(0);
+    const [companiesList, setCompaniesList] = useState([]);
     const inputRef = useRef(null);
     const navigate = useNavigate();
     const { user, logout } = useAuth();
 
     const isStudent = user?.role === 'student';
     const prefix = isStudent ? '/student' : '/admin';
+
+    useEffect(() => {
+        if (open) {
+            apiGetCompanies()
+                .then(setCompaniesList)
+                .catch(err => console.error("Error fetching companies map:", err));
+        }
+    }, [open]);
 
     const pages = isStudent ? [
         { label: 'Dashboard', icon: LayoutDashboard, path: `${prefix}/dashboard`, group: 'Pages' },
@@ -30,7 +39,7 @@ export default function CommandPalette() {
         { label: 'Logout', icon: LogOut, action: () => { logout(); navigate('/'); }, group: 'Actions' },
     ];
 
-    const companies = getCompanies().map(c => ({
+    const companies = companiesList.map(c => ({
         label: `${c.name} — ${c.role}`,
         icon: Building2,
         path: isStudent ? '/student/companies' : '/admin/companies',

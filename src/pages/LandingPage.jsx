@@ -5,7 +5,6 @@ import {
     ArrowRight, BookOpen, Building2, FileText, BarChart3,
     Bell, UserCheck, Shield, Layout, Moon, Zap, Menu, X
 } from 'lucide-react';
-import DotGrid from '../components/ui/DotGrid';
 
 /* ──────── Animated counter hook ──────── */
 function useCounter(end, duration = 2000) {
@@ -59,35 +58,22 @@ export default function LandingPage() {
 
     return (
         <div className="min-h-screen bg-black text-white overflow-x-hidden relative">
-            <div className="fixed inset-0 pointer-events-none z-0">
-                <DotGrid
-                    dotSize={3}
-                    gap={32}
-                    baseColor="#271E37"
-                    activeColor="#5227FF"
-                    proximity={60}
-                    shockRadius={150}
-                    shockStrength={3}
-                    resistance={750}
-                    returnDuration={1.5}
-                />
-            </div>
             {/* ── NAVBAR ── */}
             <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/[0.06] bg-black/80 backdrop-blur-xl">
                 <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between relative z-50">
                     <Link to="/" className="flex items-center gap-2">
-                        <span className="font-mono font-bold text-xl text-white tracking-tight">PlaceIQ</span>
+                        <span className="font-mono font-bold text-xl text-white tracking-tight">College Placement</span>
                     </Link>
 
                     {/* Desktop nav */}
                     <div className="hidden md:flex items-center gap-8">
-                        <a href="#features" className="text-sm text-gray-400 hover:text-white transition-colors">Features</a>
-                        <a href="#companies" className="text-sm text-gray-400 hover:text-white transition-colors">Companies</a>
-                        <a href="#how-it-works" className="text-sm text-gray-400 hover:text-white transition-colors">How It Works</a>
+                        <a href="#features" className="text-sm text-white/70 hover:text-white transition-colors">Features</a>
+                        <a href="#companies" className="text-sm text-white/70 hover:text-white transition-colors">Companies</a>
+                        <a href="#how-it-works" className="text-sm text-white/70 hover:text-white transition-colors">How It Works</a>
                     </div>
 
                     <div className="hidden md:flex items-center gap-3">
-                        <Link to="/login" className="text-sm font-semibold text-gray-300 hover:text-white transition-colors px-4 py-2">
+                        <Link to="/login" className="text-sm font-semibold text-white/80 hover:text-white transition-colors px-4 py-2">
                             Sign in
                         </Link>
                         <Link to="/register"
@@ -97,7 +83,7 @@ export default function LandingPage() {
                     </div>
 
                     {/* Mobile hamburger */}
-                    <button className="md:hidden text-gray-300" onClick={() => setMobileMenu(!mobileMenu)}>
+                    <button className="md:hidden text-white/80" onClick={() => setMobileMenu(!mobileMenu)}>
                         {mobileMenu ? <X size={22} /> : <Menu size={22} />}
                     </button>
                 </div>
@@ -106,9 +92,9 @@ export default function LandingPage() {
                 {mobileMenu && (
                     <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }}
                         className="md:hidden bg-black/95 border-b border-white/[0.06] px-6 pb-6 pt-2">
-                        <a href="#features" className="block py-2 text-gray-400 hover:text-white">Features</a>
-                        <a href="#companies" className="block py-2 text-gray-400 hover:text-white">Companies</a>
-                        <a href="#how-it-works" className="block py-2 text-gray-400 hover:text-white">How It Works</a>
+                        <a href="#features" className="block py-2 text-white/70 hover:text-white">Features</a>
+                        <a href="#companies" className="block py-2 text-white/70 hover:text-white">Companies</a>
+                        <a href="#how-it-works" className="block py-2 text-white/70 hover:text-white">How It Works</a>
                         <div className="mt-4 flex gap-3">
                             <Link to="/login" className="btn-ghost text-sm">Sign in</Link>
                             <Link to="/register" className="btn-outline text-sm">Get Started</Link>
@@ -138,7 +124,7 @@ export default function LandingPage() {
                     </FadeIn>
 
                     <FadeIn delay={0.2}>
-                        <p className="text-gray-400 text-base md:text-lg max-w-2xl mx-auto mb-10 leading-relaxed">
+                        <p className="text-white/70 text-base md:text-lg max-w-2xl mx-auto mb-10 leading-relaxed">
                             Track applications, explore companies, and manage your placement
                             journey — all in one lightweight, beautiful platform.
                         </p>
@@ -152,7 +138,7 @@ export default function LandingPage() {
                                 <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
                             </Link>
                             <a href="#features"
-                                className="text-gray-400 hover:text-white font-medium px-6 py-3 transition-colors">
+                                className="text-white/70 hover:text-white font-medium px-6 py-3 transition-colors">
                                 View Features
                             </a>
                         </div>
@@ -195,9 +181,9 @@ export default function LandingPage() {
                                     <div className="w-3 h-3 rounded-full bg-red-500" />
                                     <div className="w-3 h-3 rounded-full bg-yellow-500" />
                                     <div className="w-3 h-3 rounded-full bg-green-500" />
-                                    <span className="ml-3 text-sm font-mono text-gray-400">PlaceIQ Dashboard</span>
+                                    <span className="ml-3 text-sm font-mono text-white/70">College Placement Dashboard</span>
                                 </div>
-                                <div className="flex items-center gap-4 text-xs text-gray-500">
+                                <div className="flex items-center gap-4 text-xs text-white/70">
                                     <span>🟢 Active</span>
                                     <span>⏱ 99.98% uptime</span>
                                     <span className="px-2 py-0.5 bg-red-500/20 text-red-400 rounded text-xs font-semibold">Live</span>
@@ -217,7 +203,7 @@ export default function LandingPage() {
                                             <span className="text-lg">{card.icon}</span>
                                             <div>
                                                 <p className={`font-mono text-2xl font-bold ${card.color}`}>{card.value}</p>
-                                                <p className="text-xs text-gray-500">{card.label}</p>
+                                                <p className="text-xs text-white/70">{card.label}</p>
                                             </div>
                                         </div>
                                     </div>
@@ -239,9 +225,9 @@ export default function LandingPage() {
                                         <div key={i} className="flex items-center justify-between py-2.5 border-b border-white/[0.04] last:border-0">
                                             <div>
                                                 <p className="text-sm font-medium text-white">{app.name}</p>
-                                                <p className="text-xs text-gray-500">{app.role} · <span className={app.statusColor}>{app.status}</span></p>
+                                                <p className="text-xs text-white/70">{app.role} · <span className={app.statusColor}>{app.status}</span></p>
                                             </div>
-                                            <span className="text-xs text-gray-600">{app.time}</span>
+                                            <span className="text-xs text-white/60">{app.time}</span>
                                         </div>
                                     ))}
                                 </div>
@@ -262,7 +248,7 @@ export default function LandingPage() {
                                             </svg>
                                             <div className="absolute inset-0 flex flex-col items-center justify-center">
                                                 <span className="font-mono text-2xl font-bold text-white">24</span>
-                                                <span className="text-[10px] text-gray-500">total</span>
+                                                <span className="text-[10px] text-white/70">total</span>
                                             </div>
                                         </div>
                                     </div>
@@ -273,19 +259,19 @@ export default function LandingPage() {
                                     </div>
                                     <div className="mt-4 space-y-2">
                                         <div>
-                                            <div className="flex justify-between text-xs text-gray-500 mb-1"><span>IT Companies</span><span>48%</span></div>
+                                            <div className="flex justify-between text-xs text-white/70 mb-1"><span>IT Companies</span><span>48%</span></div>
                                             <div className="h-1.5 bg-white/[0.06] rounded-full overflow-hidden">
                                                 <div className="h-full bg-green-500 rounded-full" style={{ width: '48%' }} />
                                             </div>
                                         </div>
                                         <div>
-                                            <div className="flex justify-between text-xs text-gray-500 mb-1"><span>Product</span><span>32%</span></div>
+                                            <div className="flex justify-between text-xs text-white/70 mb-1"><span>Product</span><span>32%</span></div>
                                             <div className="h-1.5 bg-white/[0.06] rounded-full overflow-hidden">
                                                 <div className="h-full bg-blue-500 rounded-full" style={{ width: '32%' }} />
                                             </div>
                                         </div>
                                         <div>
-                                            <div className="flex justify-between text-xs text-gray-500 mb-1"><span>Consulting</span><span>20%</span></div>
+                                            <div className="flex justify-between text-xs text-white/70 mb-1"><span>Consulting</span><span>20%</span></div>
                                             <div className="h-1.5 bg-white/[0.06] rounded-full overflow-hidden">
                                                 <div className="h-full bg-purple-500 rounded-full" style={{ width: '20%' }} />
                                             </div>
@@ -304,7 +290,7 @@ export default function LandingPage() {
                                         { label: 'Success Rate', value: '87.5%', change: '', changeColor: '' },
                                     ].map((item, i) => (
                                         <div key={i} className="flex items-center justify-between py-2 border-b border-white/[0.04] last:border-0">
-                                            <span className="text-sm text-gray-400">{item.label}</span>
+                                            <span className="text-sm text-white/70">{item.label}</span>
                                             <span className="flex items-center gap-2">
                                                 <span className="font-mono text-sm font-semibold text-white">{item.value}</span>
                                                 {item.change && <span className={`text-xs ${item.changeColor}`}>{item.change}</span>}
@@ -328,7 +314,7 @@ export default function LandingPage() {
                         <h2 className="font-mono text-3xl md:text-5xl font-bold text-white leading-tight">
                             Everything You Need<br />to Get Placed
                         </h2>
-                        <p className="text-gray-400 mt-4 max-w-xl mx-auto">
+                        <p className="text-white/70 mt-4 max-w-xl mx-auto">
                             PlaceIQ combines application tracking, company insights, and profile management into a single unified dashboard.
                         </p>
                     </FadeIn>
@@ -350,11 +336,11 @@ export default function LandingPage() {
                                     transition={{ type: 'spring', stiffness: 300, damping: 20 }}
                                     className="group p-6 rounded-2xl border border-white/[0.06] bg-surface-card h-full cursor-default"
                                 >
-                                    <div className="w-10 h-10 rounded-lg bg-white/[0.04] border border-white/[0.08] flex items-center justify-center text-gray-400 group-hover:text-accent group-hover:bg-accent/10 group-hover:border-accent/20 transition-all duration-300 mb-4">
+                                    <div className="w-10 h-10 rounded-lg bg-white/[0.04] border border-white/[0.08] flex items-center justify-center text-white/70 group-hover:text-accent group-hover:bg-accent/10 group-hover:border-accent/20 transition-all duration-300 mb-4">
                                         {feature.icon}
                                     </div>
                                     <h3 className="font-mono text-sm font-semibold text-white mb-2">{feature.title}</h3>
-                                    <p className="text-xs text-gray-500 leading-relaxed">{feature.desc}</p>
+                                    <p className="text-xs text-white/70 leading-relaxed">{feature.desc}</p>
                                 </motion.div>
                             </FadeIn>
                         ))}
@@ -372,7 +358,7 @@ export default function LandingPage() {
                         <h2 className="font-mono text-3xl md:text-5xl font-bold text-white leading-tight">
                             Register Once.<br />Apply Anywhere.
                         </h2>
-                        <p className="text-gray-400 mt-4 max-w-xl mx-auto">
+                        <p className="text-white/70 mt-4 max-w-xl mx-auto">
                             PlaceIQ makes placement drives effortless — from profile setup to offer letter, all in four simple steps.
                         </p>
                     </FadeIn>
@@ -395,7 +381,7 @@ export default function LandingPage() {
                                         {item.icon}
                                     </div>
                                     <h3 className="font-mono text-sm font-semibold text-white mb-2">{item.title}</h3>
-                                    <p className="text-xs text-gray-500 leading-relaxed">{item.desc}</p>
+                                    <p className="text-xs text-white/70 leading-relaxed">{item.desc}</p>
                                 </motion.div>
                             </FadeIn>
                         ))}
@@ -406,9 +392,9 @@ export default function LandingPage() {
             {/* ── FOOTER ── */}
             <footer className="border-t border-white/[0.06] py-10 relative z-10">
                 <div className="max-w-6xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-4">
-                    <span className="font-mono font-bold text-lg text-white">PlaceIQ</span>
-                    <p className="text-sm text-gray-600">© 2026 PlaceIQ. College Placement Management System.</p>
-                    <div className="flex items-center gap-6 text-sm text-gray-500">
+                    <span className="font-mono font-bold text-lg text-white">College Placement</span>
+                    <p className="text-sm text-white/60">© 2026 College Placement Management System.</p>
+                    <div className="flex items-center gap-6 text-sm text-white/70">
                         <a href="#features" className="hover:text-white transition-colors">Features</a>
                         <a href="#companies" className="hover:text-white transition-colors">Companies</a>
                         <Link to="/login" className="hover:text-white transition-colors">Sign In</Link>

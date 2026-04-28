@@ -1,16 +1,43 @@
-import { useState } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { motion } from 'framer-motion';
-import { getUsers } from '../../utils/auth';
-import { getApplications, updateApplicationByAdmin, STATUS_CONFIG } from '../../data/applications';
-import { Search, User, FileText, X, Download, Phone, Code, ExternalLink, CheckCircle2, Circle, CircleDot, AlertCircle, MessageSquare } from 'lucide-react';
+import { apiGetStudents, apiGetApplications, apiAdminUpdateApplication } from '../../services/api';
+import { Search, User, FileText, X, Download, CheckCircle2, Circle, CircleDot, AlertCircle, MessageSquare, Loader2 } from 'lucide-react';
+
+const STATUS_CONFIG = {
+    applied:     { label: 'Applied',     color: 'text-blue-400',   bg: 'bg-blue-500/15',   border: 'border-blue-500/25' },
+    shortlisted: { label: 'Shortlisted', color: 'text-purple-400', bg: 'bg-purple-500/15', border: 'border-purple-500/25' },
+    interview:   { label: 'Interview',   color: 'text-orange-400', bg: 'bg-orange-500/15', border: 'border-orange-500/25' },
+    selected:    { label: 'Selected',    color: 'text-green-400',  bg: 'bg-green-500/15',  border: 'border-green-500/25' },
+    rejected:    { label: 'Rejected',    color: 'text-red-400',    bg: 'bg-red-500/15',    border: 'border-red-500/25' },
+};
 
 export default function ManageStudents() {
-    const users = getUsers().filter(u => u.role === 'student');
-    const [applications, setApplications] = useState(getApplications());
-    const [search, setSearch] = useState('');
-    const [selected, setSelected] = useState(null);
-    const [noteText, setNoteText] = useState('');
-    const [actionMsg, setActionMsg] = useState('');
+    const [users, setUsers]             = useState([]);
+    const [applications, setApplications] = useState([]);
+    const [loading, setLoading]         = useState(true);
+    const [search, setSearch]           = useState('');
+    const [selected, setSelected]       = useState(null);
+    const [noteText, setNoteText]       = useState('');
+    const [actionMsg, setActionMsg]     = useState('');
+    const [error, setError]             = useState('');
+
+    const loadData = useCallback(async () => {
+        try {
+            const [s, a] = await Promise.all([apiGetStudents(), apiGetApplications()]);
+            setUsers(s.filter(u => u.role === 'student'));
+            setApplications(a);
+        } catch (err) {
+            setError('Failed to load data — ' + err.message);
+        } finally {
+            setLoading(false);
+        }
+    }, []);
+
+    useEffect(() => { loadData(); }, [loadData]);
+
+    const getStudentApps = (studentId) => applications.filter(
+        a => a.applicant?.userId === studentId
+    );
 
     const filtered = users.filter(u =>
         u.name.toLowerCase().includes(search.toLowerCase()) ||
@@ -18,40 +45,62 @@ export default function ManageStudents() {
         (u.rollNo && u.rollNo.toLowerCase().includes(search.toLowerCase()))
     );
 
-    const handleRoundAction = (appId, roundIndex, roundStatus) => {
-        const result = updateApplicationByAdmin(appId, { roundIndex, roundStatus });
-        if (result) {
-            setApplications(getApplications());
+    const handleRoundAction = async (appId, roundIndex, roundStatus) => {
+        try {
+            await apiAdminUpdateApplication(appId, { roundIndex, roundStatus });
+            await loadData();
             setActionMsg(`Round updated to ${roundStatus}`);
             setTimeout(() => setActionMsg(''), 2000);
+        } catch (err) {
+            setActionMsg('Error: ' + err.message);
         }
     };
 
-    const handleStatusOverride = (appId, status) => {
-        updateApplicationByAdmin(appId, { status });
-        setApplications(getApplications());
-        setActionMsg(`Status set to ${status}`);
-        setTimeout(() => setActionMsg(''), 2000);
+    const handleStatusOverride = async (appId, status) => {
+        try {
+            await apiAdminUpdateApplication(appId, { status });
+            await loadData();
+            setActionMsg(`Status set to ${status}`);
+            setTimeout(() => setActionMsg(''), 2000);
+        } catch (err) {
+            setActionMsg('Error: ' + err.message);
+        }
     };
 
-    const handleAddNote = (appId) => {
+    const handleAddNote = async (appId) => {
         if (!noteText.trim()) return;
-        updateApplicationByAdmin(appId, { notes: noteText });
-        setApplications(getApplications());
-        setNoteText('');
-        setActionMsg('Note saved');
-        setTimeout(() => setActionMsg(''), 2000);
+        try {
+            await apiAdminUpdateApplication(appId, { notes: noteText });
+            await loadData();
+            setNoteText('');
+            setActionMsg('Note saved');
+            setTimeout(() => setActionMsg(''), 2000);
+        } catch (err) {
+            setActionMsg('Error: ' + err.message);
+        }
     };
+
+    if (loading) return (
+        <div className="flex items-center justify-center py-24">
+            <Loader2 size={28} className="animate-spin text-accent" />
+        </div>
+    );
 
     return (
         <div className="space-y-6">
             <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}>
                 <h1 className="font-mono text-2xl font-bold text-white">Manage Students</h1>
-                <p className="text-sm text-gray-500 mt-1">View profiles, control rounds, manage placements</p>
+                <p className="text-sm text-white/60 mt-1">View profiles, control rounds, manage placements</p>
             </motion.div>
 
+            {error && (
+                <div className="flex items-center gap-2 p-3 rounded-lg bg-red-500/10 border border-red-500/20 text-red-400 text-sm">
+                    <AlertCircle size={16} /> {error}
+                </div>
+            )}
+
             <div className="relative max-w-md">
-                <Search size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-600" />
+                <Search size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-white/40" />
                 <input type="text" value={search} onChange={e => setSearch(e.target.value)}
                     placeholder="Search students..." className="input-dark pl-10" />
             </div>
@@ -72,18 +121,18 @@ export default function ManageStudents() {
                             </div>
                             <div>
                                 <h3 className="text-sm font-medium text-white">{student.name}</h3>
-                                <p className="text-xs text-gray-600">{student.email}</p>
+                                <p className="text-xs text-white/40">{student.email}</p>
                             </div>
                         </div>
-                        <div className="flex items-center gap-4 text-xs text-gray-500 mb-3">
+                        <div className="flex items-center gap-4 text-xs text-white/60 mb-3">
                             <span>{student.department || 'N/A'}</span>
                             <span>CGPA: <span className="text-white font-mono">{student.cgpa || 0}</span></span>
                         </div>
                         <div className="flex items-center justify-between">
-                            <span className="text-xs text-gray-600">{student.rollNo || ''}</span>
+                            <span className="text-xs text-white/40">{student.rollNo || ''}</span>
                             <div className="flex items-center gap-2">
                                 {student.resume && <span className="flex items-center gap-1 text-[10px] text-green-400"><FileText size={10} />Resume</span>}
-                                <span className="text-[10px] text-gray-600">{applications.length} apps</span>
+                                <span className="text-[10px] text-white/40">{getStudentApps(student.id).length} apps</span>
                             </div>
                         </div>
                     </motion.div>
@@ -93,7 +142,7 @@ export default function ManageStudents() {
             {filtered.length === 0 && (
                 <div className="text-center py-16">
                     <User size={40} className="mx-auto text-gray-700 mb-3" />
-                    <p className="text-gray-500">No students found</p>
+                    <p className="text-white/60">No students found</p>
                 </div>
             )}
 
@@ -113,10 +162,10 @@ export default function ManageStudents() {
                                 </div>
                                 <div>
                                     <h2 className="font-mono text-lg font-bold text-white">{selected.name}</h2>
-                                    <p className="text-sm text-gray-500">{selected.department} · CGPA {selected.cgpa || 0}</p>
+                                    <p className="text-sm text-white/60">{selected.department} · CGPA {selected.cgpa || 0}</p>
                                 </div>
                             </div>
-                            <button onClick={() => setSelected(null)} className="p-2 rounded-lg hover:bg-white/[0.05] text-gray-500"><X size={18} /></button>
+                            <button onClick={() => setSelected(null)} className="p-2 rounded-lg hover:bg-white/[0.05] text-white/60"><X size={18} /></button>
                         </div>
 
                         <div className="p-6 space-y-5">
@@ -135,7 +184,7 @@ export default function ManageStudents() {
                                     { label: 'Year', value: `Year ${selected.year || '?'}` },
                                 ].map(({ label, value }) => (
                                     <div key={label} className="p-3 rounded-xl bg-white/[0.03] border border-white/[0.06]">
-                                        <p className="text-[10px] text-gray-600 uppercase tracking-wider">{label}</p>
+                                        <p className="text-[10px] text-white/40 uppercase tracking-wider">{label}</p>
                                         <p className="text-xs text-white mt-0.5 truncate">{value}</p>
                                     </div>
                                 ))}
@@ -145,7 +194,7 @@ export default function ManageStudents() {
                             {selected.skills?.length > 0 && (
                                 <div className="flex flex-wrap gap-1.5">
                                     {selected.skills.map(s => (
-                                        <span key={s} className="px-2 py-0.5 rounded-md bg-white/[0.04] border border-white/[0.06] text-[10px] text-gray-300">{s}</span>
+                                        <span key={s} className="px-2 py-0.5 rounded-md bg-white/[0.04] border border-white/[0.06] text-[10px] text-white/80">{s}</span>
                                     ))}
                                 </div>
                             )}
@@ -166,15 +215,15 @@ export default function ManageStudents() {
 
                             {/* ─── Application Round Control ─── */}
                             <div>
-                                <h4 className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">Application Round Control</h4>
+                                <h4 className="text-xs font-semibold text-white/70 uppercase tracking-wider mb-3">Application Round Control</h4>
                                 <div className="space-y-4">
-                                    {applications.map(app => (
+                                    {getStudentApps(selected.id).map(app => (
                                         <div key={app.id} className="rounded-xl border border-white/[0.04] bg-[#060606] p-4">
                                             <div className="flex items-center gap-3 mb-3">
                                                 <span className="text-lg">{app.companyLogo}</span>
                                                 <div className="flex-1">
                                                     <p className="text-sm font-medium text-white">{app.companyName} · {app.role}</p>
-                                                    <p className="text-[10px] text-gray-600">{app.package} · Applied {app.appliedDate}</p>
+                                                    <p className="text-[10px] text-white/40">{app.packageOffered} · Applied {app.appliedDate}</p>
                                                 </div>
                                                 <span className={`px-2 py-0.5 rounded-full text-[10px] font-semibold ${STATUS_CONFIG[app.status]?.bg} ${STATUS_CONFIG[app.status]?.color} border ${STATUS_CONFIG[app.status]?.border}`}>
                                                     {STATUS_CONFIG[app.status]?.label}
@@ -189,7 +238,7 @@ export default function ManageStudents() {
                                                             ${round.status === 'CLEARED' ? 'bg-green-500/10 text-green-400 border-green-500/20' :
                                                                 round.status === 'ONGOING' ? 'bg-orange-500/10 text-orange-400 border-orange-500/20' :
                                                                     round.status === 'REJECTED' ? 'bg-red-500/10 text-red-400 border-red-500/20' :
-                                                                        'bg-white/[0.02] text-gray-500 border-white/[0.04]'}`}
+                                                                        'bg-white/[0.02] text-white/60 border-white/[0.04]'}`}
                                                         >
                                                             {round.status === 'CLEARED' ? <CheckCircle2 size={12} /> :
                                                                 round.status === 'ONGOING' ? <CircleDot size={12} /> :
@@ -218,7 +267,7 @@ export default function ManageStudents() {
 
                                             {/* Quick status override */}
                                             <div className="flex items-center gap-2 pt-2 border-t border-white/[0.04]">
-                                                <span className="text-[9px] text-gray-600 uppercase mr-1">Override:</span>
+                                                <span className="text-[9px] text-white/40 uppercase mr-1">Override:</span>
                                                 {['selected', 'rejected'].map(s => (
                                                     <button key={s} onClick={() => handleStatusOverride(app.id, s)}
                                                         className={`px-2 py-0.5 rounded text-[9px] font-medium transition-colors
@@ -231,13 +280,13 @@ export default function ManageStudents() {
 
                                             {/* Admin notes */}
                                             {app.notes && (
-                                                <p className="mt-2 text-[10px] text-gray-500 italic flex items-start gap-1">
+                                                <p className="mt-2 text-[10px] text-white/60 italic flex items-start gap-1">
                                                     <MessageSquare size={10} className="mt-0.5 flex-shrink-0" /> {app.notes}
                                                 </p>
                                             )}
                                             <div className="flex gap-2 mt-2">
                                                 <input type="text" value={noteText} onChange={e => setNoteText(e.target.value)}
-                                                    placeholder="Add admin note..." className="flex-1 bg-white/[0.03] border border-white/[0.06] rounded-lg px-3 py-1.5 text-[10px] text-gray-300 placeholder:text-gray-700 focus:outline-none focus:ring-1 focus:ring-accent/30" />
+                                                    placeholder="Add admin note..." className="flex-1 bg-white/[0.03] border border-white/[0.06] rounded-lg px-3 py-1.5 text-[10px] text-white/80 placeholder:text-gray-700 focus:outline-none focus:ring-1 focus:ring-accent/30" />
                                                 <button onClick={() => handleAddNote(app.id)}
                                                     className="px-3 py-1.5 rounded-lg bg-accent/10 text-accent text-[10px] font-medium hover:bg-accent/20 transition-colors">
                                                     Save
